@@ -2,11 +2,13 @@
 .SYNOPSIS
     Get-Profile function is used to load a json debloat profile.
 .PARAMETER ProfilePath
-    Path to the debloat profile file.
+    Required. Path to the debloat profile file.
+.OUTPUTS
+    Returns the debloat profile.
 #>
 function Get-Profile {
     param(
-        [string]$ProfilePath
+        [Parameter(Mandatory)][string]$ProfilePath
     )
 
     if (-not (Test-Path $ProfilePath)) {
@@ -17,27 +19,30 @@ function Get-Profile {
     return $DebloatProfile
 }
 
-#TODO: Implement the Remove-Apps function
+<#
+.SYNOPSIS
+    
+#>
+function Get-Applist {
+    param (
+        [Parameter(Mandatory)][string]$ApplistPath
+    )
+    
+    
+}
+
+<#
+.SYNOPSIS
+    Based on provided profile, removes apps from the system.
+.PARAMETER DebloatProfile
+    Required. Debloat profile object.
+#>
 function Remove-Apps {
     param(
-        [string]$a
+        [Parameter(Mandatory)][PSCustomObject]$DebloatProfile
     )
 
-    $DebloatProfile = Get-Profile -ProfilePath $ProfilePath
 
-    if ($DebloatProfile -eq $null) {
-        Write-Warning "Profile not found."
-        return
-    }
-
-    $DebloatProfile.Apps | ForEach-Object {
-        $App = $_
-        $App | ForEach-Object {
-            $AppName = $_
-            Write-Host "Removing $AppName..."
-            Get-AppxPackage -Name $AppName | Remove-AppxPackage
-        }
-    }
 }
 
 Export-ModuleMember -Function Get-Profile

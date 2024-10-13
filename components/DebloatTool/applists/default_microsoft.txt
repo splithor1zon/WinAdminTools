@@ -66,7 +66,7 @@ Microsoft.MicrosoftStickyNotes
 Microsoft.Office.OneNote
 Microsoft.Office.Sway
 Microsoft.Todos
-Microsoft.OneDrive    # OneDrive consumer app - not OneDrive system app
+Microsoft.OneDrive    # OneDrive app
 Microsoft.OutlookForWindows    # New Outlook app
 Microsoft.PowerAutomateDesktop
 MicrosoftTeams    # Old MS Teams personal (MS Store)
