@@ -1,0 +1,96 @@
+# Bing apps
+
+Microsoft.549981C3F5F10    # Old Cortana app
+Microsoft.BingFinance
+Microsoft.BingFoodAndDrink
+Microsoft.BingHealthAndFitness
+Microsoft.BingNews
+Microsoft.BingSports
+Microsoft.BingTranslator
+Microsoft.BingTravel
+Microsoft.BingWeather
+Microsoft.News
+Microsoft.WindowsMaps
+
+# Communication apps
+
+Microsoft.Messaging    # Receive only SMS app - cellular modem required
+Microsoft.SkypeApp
+Microsoft.People    # Required for & included with Mail & Calendar
+Microsoft.windowscommunicationsapps
+
+# Copilot apps
+
+Microsoft.BingSearch    # Web Search from Microsoft Bing (Integrates into Windows Search)
+Microsoft.Copilot    # New Windows Copilot app
+
+# Basic gaming apps (only useful if the PC is used for gaming)
+
+Microsoft.Xbox.TCUI    # UI framework, seems to be required for MS store, photos and certain games
+Microsoft.XboxIdentityProvider    # Xbox sign-in framework, required for some games
+Microsoft.XboxSpeechToTextOverlay    # Might be required for some games, WARNING: This app cannot be reinstalled!
+Microsoft.GamingApp    # Modern Xbox Gaming App, required for installing some PC games
+Microsoft.XboxGameOverlay
+Microsoft.XboxGamingOverlay
+
+# Extra gaming apps
+
+Microsoft.XboxApp    # Old Xbox Console Companion App, no longer supported
+Microsoft.MicrosoftSolitaireCollection
+
+# Basic media apps (not uninstalled by default, but they have third-party replacements)
+
+# Microsoft.WindowsSoundRecorder
+# Microsoft.ZuneMusic
+# Microsoft.ZuneVideo
+# Microsoft.Windows.Photos
+# Microsoft.WindowsCamera
+
+# Extra media apps (usually not needed)
+
+Clipchamp.Clipchamp
+Microsoft.3DBuilder
+Microsoft.Microsoft3DViewer
+Microsoft.Print3D
+Microsoft.MicrosoftJournal    #Journal app for pen input
+Microsoft.MixedReality.Portal
+Microsoft.MSPaint    # Paint 3D
+Microsoft.Whiteboard
+
+# Office apps (depending on user preferences, these might be useful)
+
+Microsoft.MicrosoftJournal
+Microsoft.MicrosoftOfficeHub    # Office Hub app - not required for Office apps
+Microsoft.MicrosoftPowerBIForWindows
+Microsoft.MicrosoftStickyNotes
+Microsoft.Office.OneNote
+Microsoft.Office.Sway
+Microsoft.Todos
+Microsoft.OneDrive    # OneDrive consumer app - not OneDrive system app
+Microsoft.OutlookForWindows    # New Outlook app
+Microsoft.PowerAutomateDesktop
+MicrosoftTeams    # Old MS Teams personal (MS Store)
+MSTeams    # New MS Teams app
+
+# Utility apps (depending on user preferences, these might be useful)
+
+Microsoft.NetworkSpeedTest
+Microsoft.OneConnect    # Paid Wifi app
+Microsoft.WindowsAlarms
+Microsoft.WindowsFeedbackHub
+MicrosoftCorporationII.MicrosoftFamily    # Family Safety App
+MicrosoftCorporationII.QuickAssist
+Microsoft.YourPhone    # Phone link
+MicrosoftWindows.CrossDevice    # Phone integration within File Explorer, Camera and more
+Microsoft.RemoteDesktop
+Microsoft.Windows.DevHome
+
+# System apps (these apps probably shouldn't be uninstalled by default)
+
+# Microsoft.GetHelp    # Required for some Windows 11 Troubleshooters
+# Microsoft.Edge    # Edge browser (Can only be uninstalled in EEA)
+# Microsoft.Paint    # Classic Paint
+# Microsoft.ScreenSketch    # Snipping Tool
+# Microsoft.WindowsCalculator
+# Microsoft.WindowsTerminal
+# Microsoft.WindowsStore 

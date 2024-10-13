@@ -1,0 +1,12 @@
+{
+  "meta": {
+    "name": "Default Profile",
+    "desc": "Default profile with reversible, low-impact changes.",
+    "version": 0
+  },
+  "applists": [
+    "default_microsoft",
+    "default_third_party"
+  ],
+  "regs": []
+}
