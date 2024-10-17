@@ -1,0 +1,2 @@
+Microsoft.OneDrive    # OneDrive app
+% Microsoft.Edge    # Edge browser (Can only be uninstalled in EEA)

@@ -1,3 +1,5 @@
+# Apps starting with % will not be uninstalled
+
 # Bing apps
 
 Microsoft.549981C3F5F10    # Old Cortana app
@@ -40,11 +42,11 @@ Microsoft.MicrosoftSolitaireCollection
 
 # Basic media apps (not uninstalled by default, but they have third-party replacements)
 
-# Microsoft.WindowsSoundRecorder
-# Microsoft.ZuneMusic
-# Microsoft.ZuneVideo
-# Microsoft.Windows.Photos
-# Microsoft.WindowsCamera
+% Microsoft.WindowsSoundRecorder
+% Microsoft.ZuneMusic
+% Microsoft.ZuneVideo
+% Microsoft.Windows.Photos
+% Microsoft.WindowsCamera
 
 # Extra media apps (usually not needed)
 
@@ -66,7 +68,6 @@ Microsoft.MicrosoftStickyNotes
 Microsoft.Office.OneNote
 Microsoft.Office.Sway
 Microsoft.Todos
-Microsoft.OneDrive    # OneDrive app
 Microsoft.OutlookForWindows    # New Outlook app
 Microsoft.PowerAutomateDesktop
 MicrosoftTeams    # Old MS Teams personal (MS Store)
@@ -87,10 +88,9 @@ Microsoft.Windows.DevHome
 
 # System apps (these apps probably shouldn't be uninstalled by default)
 
-# Microsoft.GetHelp    # Required for some Windows 11 Troubleshooters
-# Microsoft.Edge    # Edge browser (Can only be uninstalled in EEA)
-# Microsoft.Paint    # Classic Paint
-# Microsoft.ScreenSketch    # Snipping Tool
-# Microsoft.WindowsCalculator
-# Microsoft.WindowsTerminal
-# Microsoft.WindowsStore 
+% Microsoft.GetHelp    # Required for some Windows 11 Troubleshooters
+% Microsoft.Paint    # Classic Paint
+% Microsoft.ScreenSketch    # Snipping Tool
+% Microsoft.WindowsCalculator
+% Microsoft.WindowsTerminal
+% Microsoft.WindowsStore 
