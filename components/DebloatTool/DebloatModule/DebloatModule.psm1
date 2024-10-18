@@ -78,9 +78,9 @@ function Get-Applist {
 .SYNOPSIS
     Based on provided profile, removes apps from the system.
 .PARAMETER DebloatProfile
-    Required. Debloat profile object.
+    Required. Debloat profile object, loaded using Get-Profile function.
 #>
-function Remove-Apps {
+function Remove-UWPApps {
     param(
         [Parameter(Mandatory)][PSCustomObject]$DebloatProfile
     )
@@ -136,6 +136,13 @@ function Remove-Apps {
             }
         }
     }
+    Write-Output ""
+}
+
+function Remove-Win32Apps {
+    param(
+        [Parameter(Mandatory)][PSCustomObject]$DebloatProfile
+    )
 
     # Check if winget is installed and remove win32 apps
     if ($global:wingetInstalled) {
@@ -159,4 +166,21 @@ function Remove-Apps {
     Write-Output ""
 }
 
-Export-ModuleMember -Function Get-Profile, Get-Applist, Remove-Apps
+<#
+#>
+function Import-Regs {
+    param(
+        [Parameter(Mandatory)][PSCustomObject]$DebloatProfile
+    )
+
+    Write-Output "Importing registry keys:"
+
+    # Loop through each registry key in the profile
+    foreach ($reg in $DebloatProfile.regs) {
+        Write-Output $reg
+        reg import ".\regs\$reg.reg"
+    }
+    
+}
+
+Export-ModuleMember -Function Get-Profile, Get-Applist, Remove-UWPApps, Remove-Win32Apps, Import-Regs

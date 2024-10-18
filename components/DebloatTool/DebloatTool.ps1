@@ -1,3 +1,5 @@
+Import-Module $PSScriptRoot\DebloatModule
+
 $AppVersion = "0.0.0"
 $ProfileFormat = "0"
 
@@ -83,10 +85,17 @@ Do {
 }
 while ($Mode -notin $Modes)
 
+# Load list of profiles and show selection menu
+function ProfileSelection {
+    $profiles = Get-ChildItem -Path "$PSScriptRoot\profiles" -Filter "*.json" | Select-Object -ExpandProperty Name
+#TODO: Implement profile selection
+}
+
 # Switch statement to handle user input
 switch ($Mode) {
     'a' {
         Write-Output "Applying a profile"
+        $selectedProfile = ProfileSelection
     }
     'b' {
         Write-Output "Creating a profile"
