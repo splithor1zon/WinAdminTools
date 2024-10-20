@@ -1,6 +1,7 @@
 Set-Location $PSScriptRoot
 # List components and show menu for user selection of which module to start
-$components = Get-ChildItem -Path ".\components" -Directory | Select-Object -ExpandProperty BaseName
+$components = @()
+Get-ChildItem -Path ".\components" -Directory | ForEach-Object { $components += $_.BaseName }
 
 # Show menu and wait for user input, loops until valid input is provided
 # Each component is enumerates with a number and the user can select the number to run the component

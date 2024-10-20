@@ -31,7 +31,9 @@ else {
 
 # Profile selection menu
 function Invoke-ProfileSelection {
-    $profs = Get-ChildItem -Path ".\profiles" -Filter "*.json" | Select-Object -ExpandProperty BaseName
+    $profs = @()
+    Get-ChildItem -Path ".\profiles" -Filter "*.json" | ForEach-Object { $profs += $_.BaseName }
+    
     do {
         $num = 1
         Clear-Host
