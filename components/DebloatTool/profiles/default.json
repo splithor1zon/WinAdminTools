@@ -1,6 +1,6 @@
 {
   "name": "Default Profile",
-  "desc": "Default profile with reversible, low-impact changes.",
+  "description": "Default profile with reversible, low-impact changes.",
   "version": 0,
   "applists_uwp": [
     "default_ms_uwp",
@@ -9,5 +9,7 @@
   "applists_win32": [
     "default_ms_win32"
   ],
-  "regs": []
+  "regs": [
+    "Open_File_Explorer_to_This_PC"
+  ]
 }

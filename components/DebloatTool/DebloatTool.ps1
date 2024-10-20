@@ -1,7 +1,7 @@
-Import-Module $PSScriptRoot\DebloatModule
+Import-Module -Name .\DebloatModule\DebloatModule.psm1 -Force
 
-$AppVersion = "0.0.0"
-$ProfileFormat = "0"
+$appVersion = "0.0.0"
+$profileFormat = "0"
 
 # Show error if current powershell environment does not have LanguageMode set to FullLanguage 
 if ($ExecutionContext.SessionState.LanguageMode -ne "FullLanguage") {
@@ -9,7 +9,7 @@ if ($ExecutionContext.SessionState.LanguageMode -ne "FullLanguage") {
     Write-Output ""
     Write-Output "Press enter to exit..."
     Read-Host | Out-Null
-    Exit
+    exit
 }
 
 # Check if winget is installed & if it is, check if the version is at least v1.4
@@ -28,21 +28,68 @@ else {
     }
 }
 
+# Profile selection menu
+function Invoke-ProfileSelection {
+    $profiles = Get-ChildItem -Path ".\profiles" -Filter "*.json" | Select-Object -ExpandProperty BaseName
+    do {
+        $num = 1
+        Clear-Host
+        Write-Host "Select your profile:"
+        foreach ($profile in $profiles) {
+            Write-Host "  ($num) $profile"
+            $num++
+        }
+        Write-Host ""
+        Write-Host "(x) Back"
+        Write-Host ""
+        $selection = Read-Host "Your selection: "
+        if ($selection -eq "x") {
+            return $null
+        }
+    } while ($selection -notin 1..$profiles.Count)
+    
+    return $profiles[[int]$selection - 1]
+}
+
+Function Show-ProfileInfo {
+    param(
+        [Parameter(Mandatory)][string]$profileName
+    )
+    
+    Clear-Host
+    $selectedProfile = Get-Profile $profileName
+    $profileInfo = @"
+Profile information
+-------------------
+
+Name:           $($selectedProfile.Name)
+Description:    $($selectedProfile.Description)
+Version:        $($selectedProfile.Version) (Current version: $profileFormat)
+UWP Applists:   $($selectedProfile.applists_uwp)
+Win32 Applists: $($selectedProfile.applists_win32)
+Regs:           $($selectedProfile.regs)
+
+"@
+    Write-Host $profileInfo
+    Write-Host "Press any key to go back..."
+    $null = [System.Console]::ReadKey()
+}
+
 ###########################
 # Main part of the script #
 ###########################
 
-$Modes = @('a', 'b', 'c')
+$modes = @('a', 'b', 'c')
 
-$Header = @"
+$header = @"
 # ------------------------------------- #
 #           WAT: Debloat Tool           #
-# App Version: $AppVersion  Profile Format: $ProfileFormat #
+# App Version: $appVersion  Profile Format: $profileFormat #
 # ------------------------------------- #
 "@
 
-$MainMenu = @"
-$Header
+$mainMenu = @"
+$header
 
 (a) Apply a profile
 (b) Create a profile
@@ -53,13 +100,13 @@ $Header
 
 "@
 
-$InfoCredits = @"
-$Header
+$infoCredits = @"
+$header
 
 Developed by: Damian Filo
 
-Version: $AppVersion
-Profile Format: $ProfileFormat
+Version: $appVersion
+Profile Format: $profileFormat
 
 Credits:
 https://github.com/Raphire/Win11Debloat
@@ -67,40 +114,48 @@ https://github.com/Raphire/Win11Debloat
 "@
 
 # Show menu and wait for user input, loops until valid input is provided
-Do { 
-    Clear-Host
-    Write-Output $MainMenu
-
-    $Mode = Read-Host "Please select an option (a/b/c/i/x)"
-
-    if ($Mode -eq 'x') {
-        Write-Output "Thank you, bye!"
-        exit
-    } elseif ($Mode -eq 'i') {
+while ($true) {
+    do { 
         Clear-Host
-        Write-Output $InfoCredits
-        Write-Output "Press any key to go back..."
-        Read-Host | Out-Null
-    }
-}
-while ($Mode -notin $Modes)
+        Write-Host $mainMenu
 
-# Load list of profiles and show selection menu
-function ProfileSelection {
-    $profiles = Get-ChildItem -Path "$PSScriptRoot\profiles" -Filter "*.json" | Select-Object -ExpandProperty Name
-#TODO: Implement profile selection
-}
+        $mode = Read-Host "Please select an option (a/b/c/i/x)"
 
-# Switch statement to handle user input
-switch ($Mode) {
-    'a' {
-        Write-Output "Applying a profile"
-        $selectedProfile = ProfileSelection
+        if ($mode -eq 'x') {
+            Write-Host "Thank you, bye!"
+            exit
+        } elseif ($mode -eq 'i') {
+            Clear-Host
+            Write-Host $infoCredits
+            Write-Host "Press any key to go back..."
+            $null = [System.Console]::ReadKey()
+        }
     }
-    'b' {
-        Write-Output "Creating a profile"
-    }
-    'c' {
-        Write-Output "Listing profile settings"
+    while ($mode -notin $modes)
+
+    # Switch statement to handle user input
+    Switch ($mode) {
+        'a' {
+            Write-Host "Applying a profile"
+            $selectedProfile = Invoke-ProfileSelection
+            if ($null -ne $selectedProfile) {
+                $prof = Get-Profile $selectedProfile
+                Remove-UWPApps $prof
+                Remove-Win32Apps $prof
+                Import-Regs $prof
+            }
+            break
+        }
+        'b' {
+            Write-Host "Creating a profile"
+            break
+        }
+        'c' {
+            $selectedProfile = Invoke-ProfileSelection
+            if ($null -ne $selectedProfile) {
+                Show-ProfileInfo $selectedProfile
+            }
+            break
+        }
     }
 }

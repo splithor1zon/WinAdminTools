@@ -1,21 +1,23 @@
 <#
 .SYNOPSIS
     Get-Profile function is used to load a json debloat profile.
-.PARAMETER ProfilePath
-    Required. Path to the debloat profile file.
+.PARAMETER ProfileName
+    Required. ProfileName is the name of the json file to load.
 .OUTPUTS
     Returns the debloat profile.
 #>
 function Get-Profile {
     param(
-        [Parameter(Mandatory)][string]$ProfilePath
+        [Parameter(Mandatory)][string]$ProfileName
     )
 
+    $ProfilePath = ".\profiles\$ProfileName.json"
     if (-not (Test-Path $ProfilePath)) {
         return $null
     }
 
     $DebloatProfile = Get-Content -Path $ProfilePath -Raw | ConvertFrom-Json
+    # TODO: Validate the profile
     return $DebloatProfile
 }
 
