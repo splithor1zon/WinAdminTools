@@ -94,7 +94,7 @@ function Remove-UWPApps {
         # Get the list of apps from the applist file
         $apps = Get-Applist -Type uwp -Name $applist
         foreach ($app in $apps) {
-            Write-Host "<> $app"
+            Write-Host "  <> $app"
             # Use Remove-AppxPackage to remove all other apps
             $app = '*' + $app + '*'
 
@@ -155,7 +155,7 @@ function Remove-Win32Apps {
             $apps = Get-Applist -Type win32 -Name $applist
             foreach ($app in $apps) {
                 # Use winget to remove win32 apps
-                Write-Host "<> $app"
+                Write-Host "  <> $app"
                 winget uninstall --accept-source-agreements --disable-interactivity --id $app
 
                 If (($app -eq "Microsoft.Edge") -and (Select-String -InputObject $wingetOutput -Pattern "93")) {
@@ -181,7 +181,7 @@ function Import-Regs {
 
     # Loop through each registry key in the profile
     foreach ($reg in $DebloatProfile.regs) {
-        Write-Host $reg
+        Write-Host "  <> $reg"
         reg import ".\regs\$reg.reg"
     }
     

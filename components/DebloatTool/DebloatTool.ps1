@@ -9,7 +9,7 @@ if ($ExecutionContext.SessionState.LanguageMode -ne "FullLanguage") {
     Write-Host "Error: Win11Debloat is unable to run on your system, powershell execution is restricted by security policies" -ForegroundColor Red
     Write-Output ""
     Write-Output "Press enter to exit..."
-    Read-Host | Out-Null
+    $null = [System.Console]::ReadKey()
     exit
 }
 
@@ -33,7 +33,7 @@ else {
 function Invoke-ProfileSelection {
     $profs = @()
     Get-ChildItem -Path ".\profiles" -Filter "*.json" | ForEach-Object { $profs += $_.BaseName }
-    
+
     do {
         $num = 1
         Clear-Host
@@ -45,13 +45,34 @@ function Invoke-ProfileSelection {
         Write-Host ""
         Write-Host "(x) Back"
         Write-Host ""
-        $selection = Read-Host "Please select an option: "
+        $selection = Read-Host "Please select an option"
         if ($selection -eq "x") {
             return $null
         }
     } while ($selection -notin 1..$profs.Count)
     
     return $profs[[int]$selection - 1]
+}
+
+function Invoke-ProfileApplication {
+    param(
+        [Parameter(Mandatory)][string]$ProfileName
+    )
+
+    Clear-Host
+    $prof = Get-Profile $selectedProfile
+
+    Write-Host ""
+    Write-Host "Applying profile: $selectedProfile"
+    Write-Host ""
+    
+    Remove-UWPApps $prof
+    Remove-Win32Apps $prof
+    Import-Regs $prof
+
+    Write-Host ""
+    Write-Host "Press any key to go back..."
+    $null = [System.Console]::ReadKey()
 }
 
 Function Show-ProfileInfo {
@@ -122,7 +143,7 @@ while ($true) {
         Clear-Host
         Write-Host $mainMenu
 
-        $mode = Read-Host "Please select an option: "
+        $mode = Read-Host "Please select an option"
 
         if ($mode -eq 'x') {
             exit
@@ -141,18 +162,13 @@ while ($true) {
             Write-Host "Applying a profile"
             $selectedProfile = Invoke-ProfileSelection
             if ($null -ne $selectedProfile) {
-                $prof = Get-Profile $selectedProfile
-                Remove-UWPApps $prof
-                Remove-Win32Apps $prof
-                Import-Regs $prof
-
-                Write-Host "Press any key to go back..."
-                $null = [System.Console]::ReadKey()
+                Invoke-ProfileApplication $selectedProfile
             }
             break
         }
         'b' {
-            Write-Host "Creating a profile"
+            Write-Host "Not implemented yet..."
+            $null = [System.Console]::ReadKey()
             break
         }
         'c' {
