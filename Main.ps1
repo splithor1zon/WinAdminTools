@@ -1,24 +1,27 @@
+Set-Location $PSScriptRoot
 # List components and show menu for user selection of which module to start
-$components = @()
-Get-ChildItem -Path $PSScriptRoot\components -Directory | ForEach-Object { $components += $_.BaseName }
-$components
+$components = Get-ChildItem -Path ".\components" -Directory | Select-Object -ExpandProperty BaseName
 
 # Show menu and wait for user input, loops until valid input is provided
 # Each component is enumerates with a number and the user can select the number to run the component
-Do { 
+do { 
     Clear-Host
-    Write-Output "Select a component to run:"
-    $num = 0
-    $components | ForEach-Object { $num++; Write-Output " ($num) $_" }
+    Write-Host "Select a component to run:"
+    $num = 1
+    foreach ($component in $components) {
+        Write-Host "  ($num) $component"
+        $num++
+    }
+    Write-Host ""
+    Write-Host "(x) Exit"
+    Write-Host ""
+    $mode = Read-Host "Please select an option: "
 
-    $Mode = Read-Host "Please select an option (1-$($components.Count)) or 'x' to exit"
-
-    if ($Mode -eq 'x') {
-        Write-Output "Thank you, bye!"
+    if ($mode -eq 'x') {
         exit
     }
-} While ($Mode -lt 1 -or $Mode -gt $components.Count)
+} while ($mode -notin 1..$components.Count)
 
 # Run the selected component
-$component = $components[$Mode - 1]
-. "$PSScriptRoot\components\$component\$component.ps1"
+$component = $components[$mode - 1]
+. ".\components\$component\$component.ps1"

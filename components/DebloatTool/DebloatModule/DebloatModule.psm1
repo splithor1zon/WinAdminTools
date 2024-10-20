@@ -89,11 +89,12 @@ function Remove-UWPApps {
 
     # Loop through each uwp applist in the profile
     foreach ($applist in $DebloatProfile.applists_uwp) {
-        Write-Output ""
-        Write-Output "Removing UWP apps from applist: $applist"
+        Write-Host ""
+        Write-Host "Removing UWP apps from applist: $applist..."
         # Get the list of apps from the applist file
         $apps = Get-Applist -Type uwp -Name $applist
         foreach ($app in $apps) {
+            Write-Host "<> $app"
             # Use Remove-AppxPackage to remove all other apps
             $app = '*' + $app + '*'
 
@@ -138,7 +139,7 @@ function Remove-UWPApps {
             }
         }
     }
-    Write-Output ""
+    Write-Host ""
 }
 
 function Remove-Win32Apps {
@@ -149,23 +150,24 @@ function Remove-Win32Apps {
     # Check if winget is installed and remove win32 apps
     if ($global:wingetInstalled) {
         foreach ($applist in $DebloatProfile.applists_win32) {
-            Write-Output ""
-            Write-Output "Removing Win32 apps from applist: $applist"
+            Write-Host ""
+            Write-Host "Removing Win32 apps from applist: $applist..."
             $apps = Get-Applist -Type win32 -Name $applist
             foreach ($app in $apps) {
                 # Use winget to remove win32 apps
-                Strip-Progress -ScriptBlock { winget uninstall --accept-source-agreements --disable-interactivity --id $app } | Tee-Object -Variable wingetOutput 
+                Write-Host "<> $app"
+                winget uninstall --accept-source-agreements --disable-interactivity --id $app
 
                 If (($app -eq "Microsoft.Edge") -and (Select-String -InputObject $wingetOutput -Pattern "93")) {
                     Write-Host "Unable to uninstall Microsoft Edge via Winget" -ForegroundColor Red
-                    Write-Output ""
+                    Write-Host ""
                 }
             }
         }
     } else {
         Write-Host "Error: WinGet is either not installed or is outdated, Win32 apps could not be removed" -ForegroundColor Red
     }
-    Write-Output ""
+    Write-Host ""
 }
 
 <#
@@ -175,11 +177,11 @@ function Import-Regs {
         [Parameter(Mandatory)][PSCustomObject]$DebloatProfile
     )
 
-    Write-Output "Importing registry keys:"
+    Write-Host "Importing registry keys:"
 
     # Loop through each registry key in the profile
     foreach ($reg in $DebloatProfile.regs) {
-        Write-Output $reg
+        Write-Host $reg
         reg import ".\regs\$reg.reg"
     }
     

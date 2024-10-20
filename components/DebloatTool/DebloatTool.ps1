@@ -1,7 +1,8 @@
+Set-Location $PSScriptRoot
 Import-Module -Name .\DebloatModule\DebloatModule.psm1 -Force
 
 $appVersion = "0.0.0"
-$profileFormat = "0"
+$profFormat = "0"
 
 # Show error if current powershell environment does not have LanguageMode set to FullLanguage 
 if ($ExecutionContext.SessionState.LanguageMode -ne "FullLanguage") {
@@ -30,47 +31,47 @@ else {
 
 # Profile selection menu
 function Invoke-ProfileSelection {
-    $profiles = Get-ChildItem -Path ".\profiles" -Filter "*.json" | Select-Object -ExpandProperty BaseName
+    $profs = Get-ChildItem -Path ".\profiles" -Filter "*.json" | Select-Object -ExpandProperty BaseName
     do {
         $num = 1
         Clear-Host
         Write-Host "Select your profile:"
-        foreach ($profile in $profiles) {
-            Write-Host "  ($num) $profile"
+        foreach ($prof in $profs) {
+            Write-Host "  ($num) $prof"
             $num++
         }
         Write-Host ""
         Write-Host "(x) Back"
         Write-Host ""
-        $selection = Read-Host "Your selection: "
+        $selection = Read-Host "Please select an option: "
         if ($selection -eq "x") {
             return $null
         }
-    } while ($selection -notin 1..$profiles.Count)
+    } while ($selection -notin 1..$profs.Count)
     
-    return $profiles[[int]$selection - 1]
+    return $profs[[int]$selection - 1]
 }
 
 Function Show-ProfileInfo {
     param(
-        [Parameter(Mandatory)][string]$profileName
+        [Parameter(Mandatory)][string]$profName
     )
     
     Clear-Host
-    $selectedProfile = Get-Profile $profileName
-    $profileInfo = @"
+    $selectedProfile = Get-Profile $profName
+    $profInfo = @"
 Profile information
 -------------------
 
 Name:           $($selectedProfile.Name)
 Description:    $($selectedProfile.Description)
-Version:        $($selectedProfile.Version) (Current version: $profileFormat)
+Version:        $($selectedProfile.Version) (Current version: $profFormat)
 UWP Applists:   $($selectedProfile.applists_uwp)
 Win32 Applists: $($selectedProfile.applists_win32)
 Regs:           $($selectedProfile.regs)
 
 "@
-    Write-Host $profileInfo
+    Write-Host $profInfo
     Write-Host "Press any key to go back..."
     $null = [System.Console]::ReadKey()
 }
@@ -84,7 +85,7 @@ $modes = @('a', 'b', 'c')
 $header = @"
 # ------------------------------------- #
 #           WAT: Debloat Tool           #
-# App Version: $appVersion  Profile Format: $profileFormat #
+# App Version: $appVersion  Profile Format: $profFormat #
 # ------------------------------------- #
 "@
 
@@ -106,7 +107,7 @@ $header
 Developed by: Damian Filo
 
 Version: $appVersion
-Profile Format: $profileFormat
+Profile Format: $profFormat
 
 Credits:
 https://github.com/Raphire/Win11Debloat
@@ -119,10 +120,9 @@ while ($true) {
         Clear-Host
         Write-Host $mainMenu
 
-        $mode = Read-Host "Please select an option (a/b/c/i/x)"
+        $mode = Read-Host "Please select an option: "
 
         if ($mode -eq 'x') {
-            Write-Host "Thank you, bye!"
             exit
         } elseif ($mode -eq 'i') {
             Clear-Host
@@ -143,6 +143,9 @@ while ($true) {
                 Remove-UWPApps $prof
                 Remove-Win32Apps $prof
                 Import-Regs $prof
+
+                Write-Host "Press any key to go back..."
+                $null = [System.Console]::ReadKey()
             }
             break
         }
