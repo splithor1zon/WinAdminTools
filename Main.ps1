@@ -1,7 +1,15 @@
 Set-Location $PSScriptRoot
+[console]::WindowHeight = [Console]::WindowHeight - 5
 # List components and show menu for user selection of which module to start
 $components = @()
 Get-ChildItem -Path ".\components" -Directory | ForEach-Object { $components += $_.BaseName }
+
+# Run component directly if there is just a single one.
+if ($components.Count -eq 1) {
+    $component = $components[0]
+    . ".\components\$component\$component.ps1"
+    exit
+}
 
 # Show menu and wait for user input, loops until valid input is provided
 # Each component is enumerates with a number and the user can select the number to run the component
