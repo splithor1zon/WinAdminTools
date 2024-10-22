@@ -1,31 +1,41 @@
 Set-Location $PSScriptRoot
 Import-Module -Name .\DebloatModule\DebloatModule.psm1 -Force
 
+$progressPreference = 'silentlyContinue'
 $appVersion = "0.0.0"
 $profFormat = "0"
 
 # Show error if current powershell environment does not have LanguageMode set to FullLanguage 
 if ($ExecutionContext.SessionState.LanguageMode -ne "FullLanguage") {
     Write-Host "Error: Win11Debloat is unable to run on your system, powershell execution is restricted by security policies" -ForegroundColor Red
-    Write-Output ""
-    Write-Output "Press enter to exit..."
+    Write-Host ""
+    Write-Host "Press enter to exit..."
     $null = [System.Console]::ReadKey()
     exit
 }
 
 # Check if winget is installed & if it is, check if the version is at least v1.4
-if ((Get-AppxPackage -Name "*Microsoft.DesktopAppInstaller*") -and ((winget -v) -replace 'v','' -gt 1.4)) {
-    $global:wingetInstalled = $true
+$wingetVer = 0
+try {
+    $wingetVer = ((winget -v) -replace 'v','')
+} catch {
+    Write-Host "Winget not present / outdated"
 }
-else {
-    $global:wingetInstalled = $false
 
-    # Show warning that requires user confirmation, Suppress confirmation if Silent parameter was passed
-    if (-not $Silent) {
-        Write-Warning "Winget is not installed or outdated. This may prevent Win11Debloat from removing certain apps."
-        Write-Output ""
-        Write-Output "Press any key to continue anyway..."
+if ($wingetVer -lt 1.4) {
+    # Try to install winget
+    try {
+        Write-Host "Downloading WinGet..."
+        Invoke-WebRequest -Uri https://aka.ms/getwinget -OutFile Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
+        Write-Host "Installing WinGet..."
+        Add-AppxPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
+        Remove-Item Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
+    } catch {
+        Write-Host "Winget installation was not successful, please install/update winget manually. After update, start the script again."
+        Write-Host "Press any key to start Microsoft Store to update App Installer..."
         $null = [System.Console]::ReadKey()
+        Start-Process ms-windows-store://pdp/?ProductId=9NBLGGH4NNS1
+        exit
     }
 }
 
@@ -54,28 +64,7 @@ function Invoke-ProfileSelection {
     return $profs[[int]$selection - 1]
 }
 
-function Invoke-ProfileApplication {
-    param(
-        [Parameter(Mandatory)][string]$ProfileName
-    )
-
-    Clear-Host
-    $prof = Get-Profile $selectedProfile
-
-    Write-Host ""
-    Write-Host "Applying profile: $selectedProfile"
-    Write-Host ""
-    
-    Remove-UWPApps $prof
-    Remove-Win32Apps $prof
-    Import-Regs $prof
-
-    Write-Host ""
-    Write-Host "Press any key to go back..."
-    $null = [System.Console]::ReadKey()
-}
-
-Function Show-ProfileInfo {
+function Show-ProfileInfo {
     param(
         [Parameter(Mandatory)][string]$profName
     )
@@ -99,9 +88,7 @@ Regs:           $($selectedProfile.regs)
     $null = [System.Console]::ReadKey()
 }
 
-###########################
-# Main part of the script #
-###########################
+# Main Menu
 
 $modes = @('a', 'b', 'c')
 
@@ -142,7 +129,6 @@ while ($true) {
     do { 
         Clear-Host
         Write-Host $mainMenu
-
         $mode = Read-Host "Please select an option"
 
         if ($mode -eq 'x') {
@@ -153,11 +139,10 @@ while ($true) {
             Write-Host "Press any key to go back..."
             $null = [System.Console]::ReadKey()
         }
-    }
-    while ($mode -notin $modes)
+    } while ($mode -notin $modes)
 
     # Switch statement to handle user input
-    Switch ($mode) {
+    switch ($mode) {
         'a' {
             Write-Host "Applying a profile"
             $selectedProfile = Invoke-ProfileSelection
