@@ -15,14 +15,16 @@ if ($ExecutionContext.SessionState.LanguageMode -ne "FullLanguage") {
 }
 
 # Check if winget is installed & if it is, check if the version is at least v1.4
+Write-Host "Checking winget version..."
 $wingetVer = 0
 try {
     $wingetVer = ((winget -v) -replace 'v','')
 } catch {
-    Write-Host "Winget not present / outdated"
+    Write-Host "Winget missing" -ForegroundColor Red
 }
 
 if ($wingetVer -lt 1.4) {
+    Write-Host "Installed: $wingetVer, Required: >1.4"
     # Try to install winget
     try {
         Write-Host "Downloading WinGet..."
