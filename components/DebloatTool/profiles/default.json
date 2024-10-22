@@ -10,6 +10,17 @@
     "default_ms_win32"
   ],
   "regs": [
-    "Open_File_Explorer_to_This_PC"
+    "Open_File_Explorer_to_This_PC",
+    "Disable_Telemetry",
+    "Disable_Bing_Cortana_In_Search",
+    "Disable_Lockscreen_Tips",
+    "Disable_Windows_Suggestions",
+    "Show_Extensions_For_Known_File_Types",
+    "Disable_Widgets_Taskbar",
+    "Disable_Chat_Taskbar",
+    "Disable_Copilot",
+    "Enable_compact_view_in_File_Explorer",
+    "Open_File_Explorer_to_This_PC",
+    "Disable_Gaming_Overlay"
   ]
 }

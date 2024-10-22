@@ -1,4 +1,4 @@
-# Apps starting with % will not be uninstalled
+# Apps starting with % will not be uninstalled, but can be enabled/disabled
 
 # Bing apps
 
@@ -54,7 +54,7 @@ Clipchamp.Clipchamp
 Microsoft.3DBuilder
 Microsoft.Microsoft3DViewer
 Microsoft.Print3D
-Microsoft.MicrosoftJournal    #Journal app for pen input
+Microsoft.MicrosoftJournal    # Journal app for pen input
 Microsoft.MixedReality.Portal
 Microsoft.MSPaint    # Paint 3D
 Microsoft.Whiteboard
