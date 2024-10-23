@@ -2,8 +2,8 @@ Set-Location $PSScriptRoot
 Import-Module -Name .\DebloatModule\DebloatModule.psm1 -Force
 
 $progressPreference = 'silentlyContinue'
-$appVersion = "0.0.0"
-$profFormat = "0"
+$appVersion = "0.0.1"
+$profFormat = "1"
 
 # Show error if current powershell environment does not have LanguageMode set to FullLanguage 
 if ($ExecutionContext.SessionState.LanguageMode -ne "FullLanguage") {
@@ -66,28 +66,42 @@ function Invoke-ProfileSelection {
     return $profs[[int]$selection - 1]
 }
 
+<#
+.SYNOPSIS
+    This function shows profile info based on provided profile name.
+.PARAMETER Name
+    Required. Profile name string.
+#>
 function Show-ProfileInfo {
     param(
-        [Parameter(Mandatory)][string]$profName
+        [Parameter(Mandatory)][string]$Name
     )
     
     Clear-Host
-    $selectedProfile = Get-Profile $profName
-    $profInfo = @"
+    $prof = Get-Profile $Name
+    if ($null -eq $prof) {
+        Write-Host @"
+Profile '$Name' not found...
+
+Press any key to go back...
+"@ -ForegroundColor Red
+        $null = [System.Console]::ReadKey()
+    } else {
+        Write-Host @"
 Profile information
 -------------------
 
-Name:           $($selectedProfile.Name)
-Description:    $($selectedProfile.Description)
-Version:        $($selectedProfile.Version) (Current version: $profFormat)
-UWP Applists:   $($selectedProfile.applists_uwp)
-Win32 Applists: $($selectedProfile.applists_win32)
-Regs:           $($selectedProfile.regs)
+Name:           $($prof.Name)
+Description:    $($prof.Description)
+Version:        $($prof.Version) (Current version: $profFormat)
+UWP Applists:   $($prof.applists_uwp)
+Win32 Applists: $($prof.applists_win32)
+Regs:           $($prof.regs)
 
+Press any key to go back...
 "@
-    Write-Host $profInfo
-    Write-Host "Press any key to go back..."
-    $null = [System.Console]::ReadKey()
+        $null = [System.Console]::ReadKey()
+    }
 }
 
 # Main Menu
@@ -117,9 +131,7 @@ $infoCredits = @"
 $header
 
 Developed by: Damian Filo
-
-Version: $appVersion
-Profile Format: $profFormat
+https://github.com/splithor1zon/WinAdminTools
 
 Credits:
 https://github.com/Raphire/Win11Debloat
@@ -137,7 +149,7 @@ while ($true) {
             exit
         } elseif ($mode -eq 'i') {
             Clear-Host
-            Write-Host $infoCredits
+            Write-Host $infoCredits -ForegroundColor Magenta
             Write-Host "Press any key to go back..."
             $null = [System.Console]::ReadKey()
         }

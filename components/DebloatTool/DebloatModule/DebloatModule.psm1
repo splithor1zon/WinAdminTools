@@ -190,7 +190,7 @@ function Import-Reg {
         Write-Host ""
     }
     Write-Host ""
-    Write-Host "Restarting explorer.exe, if it did not start automatically:" -ForegroundColor 
+    Write-Host "Restarting explorer.exe, if it did not start automatically:" -ForegroundColor Cyan
     Write-Host "    > Open Task Manager (Ctrl+Shift+Esc) > Start new task > explorer.exe" -ForegroundColor Cyan
     Start-Process explorer.exe
     Write-Host ""

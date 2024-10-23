@@ -1,7 +1,7 @@
 {
   "name": "Default Profile",
   "description": "Default profile with reversible, low-impact changes.",
-  "version": 0,
+  "version": 1,
   "applists_uwp": [
     "default_ms_uwp",
     "default_third_party"
