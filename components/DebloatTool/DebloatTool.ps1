@@ -2,8 +2,9 @@ Set-Location $PSScriptRoot
 Import-Module -Name .\DebloatModule\DebloatModule.psm1 -Force
 
 $progressPreference = 'silentlyContinue'
-$appVersion = "0.0.1"
+$appVersion = "0.0.2"
 $profFormat = "1"
+$minWinGetVersion = 1.8
 
 # Show error if current powershell environment does not have LanguageMode set to FullLanguage 
 if ($ExecutionContext.SessionState.LanguageMode -ne "FullLanguage") {
@@ -14,7 +15,7 @@ if ($ExecutionContext.SessionState.LanguageMode -ne "FullLanguage") {
     exit
 }
 
-# Check if winget is installed & if it is, check if the version is at least v1.4
+# Check if winget is installed & if it is, check if the version is at least $minWinGetVersion
 Write-Host "Checking winget version..."
 $wingetVer = 0
 try {
@@ -23,8 +24,8 @@ try {
     Write-Host "Winget missing" -ForegroundColor Red
 }
 
-if ($wingetVer -lt 1.4) {
-    Write-Host "Installed: $wingetVer, Required: >1.4"
+if ($wingetVer -lt $minWinGetVersion) {
+    Write-Host "Installed: $wingetVer, Required: >$minWinGetVersion"
     # Try to install winget
     try {
         Write-Host "Downloading WinGet..."

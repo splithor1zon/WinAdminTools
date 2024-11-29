@@ -148,7 +148,7 @@ function Remove-Win32App {
     foreach ($app in $Name) {
         # Use winget to remove win32 apps
         Write-Host "  <> $app"
-        winget uninstall --accept-source-agreements --disable-interactivity --id $app
+        winget uninstall --accept-source-agreements --disable-interactivity --silent --force --id $app
 
         if (($app -eq "Microsoft.Edge") -and (Select-String -InputObject $wingetOutput -Pattern "93")) {
             Write-Host "Unable to uninstall Microsoft Edge via Winget" -ForegroundColor Red
@@ -211,6 +211,11 @@ function Invoke-ProfileApplication {
     foreach ($applist in $prof.applists_uwp) {
         Write-Host "Removing UWP apps from applist: $applist..."
         $uwpApps = Get-Applist -Type uwp -Name $applist
+        # Check if the applist is empty
+        if ($null -eq $uwpApps) {
+            Write-Host "No apps found in applist: $applist" -ForegroundColor Yellow
+            continue
+        }
         Remove-UWPApp $uwpApps
     }
 
@@ -218,6 +223,11 @@ function Invoke-ProfileApplication {
     foreach ($applist in $prof.applists_win32) {
         Write-Host "Removing Win32 apps from applist: $applist..."
         $win32Apps = Get-Applist -Type win32 -Name $applist
+        # Check if the applist is empty
+        if ($null -eq $win32Apps) {
+            Write-Host "No apps found in applist: $applist" -ForegroundColor Yellow
+            continue
+        }
         Remove-Win32App $win32Apps
     }
 
