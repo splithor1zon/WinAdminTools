@@ -6,7 +6,7 @@ WinAdminTools (WAT) is a collection of tools simplifying setup/deployment/repair
 
 *Feel free to suggest new components/functions. Please report bugs if you encounter any. Thank you! 🤝*
 
-Current version: 0.0.1
+Current version: 0.0.2
 Current profile format: 1
 
 ## What works
