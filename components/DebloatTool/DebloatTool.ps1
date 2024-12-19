@@ -29,10 +29,10 @@ if ($wingetVer -lt $minWinGetVersion) {
     # Try to install winget
     try {
         Write-Host "Downloading WinGet..."
-        Invoke-WebRequest -Uri https://aka.ms/getwinget -OutFile Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
+        Invoke-WebRequest -Uri https://aka.ms/getwinget -OutFile $ENV:Temp\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
         Write-Host "Installing WinGet..."
-        Add-AppxPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
-        Remove-Item Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
+        Add-AppxPackage $ENV:Temp\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
+        Remove-Item $ENV:Temp\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
     } catch {
         Write-Host "Winget installation was not successful, please install/update winget manually. After update, start the script again."
         Write-Host "Press any key to start Microsoft Store to update App Installer..."
